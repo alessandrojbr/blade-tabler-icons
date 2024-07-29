@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   pull_request:
   schedule:
-   - cron: '0 12 * * 1'
+    - cron: '0 12 * * 1'
 
 permissions:
   contents: write
@@ -16,38 +16,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-    
-    - name: Yarn Upgrader
-      uses: browniebroke/yarn-upgrade-action@v1.1
+      - uses: actions/checkout@v3
       
-    - name: Install dependencies
-      run: composer update --no-interaction --no-progress --dev
-      
-    - name: Compile icons to resources directory
-      run: ./vendor/bin/blade-icons-generate
-    
-    - name: Create pull request
-      uses: peter-evans/create-pull-request@v6
-      with:
-       title: Icons Release ID:${{ github.run_number }}
-       body: Auto Update Icons ID:${{ github.run_number }} RUN_ID:${{ github.run_id }}
-       commit-message: 'feat: automated change Icons Release ID:${{ github.run_number }}'
-       base: main
-       delete-branch: true
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
-                    
-                
-            
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      
+      - name: Yarn Upgrader
+        uses: browniebroke/yarn-upgrade-action@v1.1
+        
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --dev
+        
+      - name: Compile icons to resources directory
+        run: ./vendor/bin/blade-icons-generate
+      
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: Icons Release ID:${{ github.run_number }}
+          body: Auto Update Icons ID:${{ github.run_number }} RUN_ID:${{ github.run_id }}
+          commit-message: 'feat: automated change Icons Release ID:${{ github.run_number }}'
+          base: main
+          delete-branch: true
