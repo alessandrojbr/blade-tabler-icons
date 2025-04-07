@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Orchestra\Testbench\TestCase;
 use BladeUI\Icons\BladeIconsServiceProvider;
+use Orchestra\Testbench\TestCase;
 use secondnetwork\TablerIcons\BladeTablerIconsServiceProvider;
 
 class CompilesIconsTest extends TestCase

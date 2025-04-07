@@ -8,12 +8,10 @@ parameters:
   level: 5
 
   # Opcional, melhora análise em Laravel
-  checkMissingIterableValueType: false
-  checkGenericClassInNonGenericObjectType: false
-
   # Ignorar arquivos de teste se quiser (remova se quiser verificar tudo)
   excludePaths:
-    - tests/bootstrap.php
+    analyseAndScan:
+      - tests/bootstrap.php (?)
 
   # Se quiser forçar a escrita de tipos
   inferPrivatePropertyTypeFromConstructor: true
