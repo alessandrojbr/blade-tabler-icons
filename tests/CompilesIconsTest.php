@@ -3,9 +3,9 @@
 namespace Tests;
 
 use BladeUI\Icons\Factory;
-use Orchestra\Testbench\TestCase;
 use BladeUI\Icons\IconsManifest;
 use Illuminate\Filesystem\Filesystem;
+use Orchestra\Testbench\TestCase;
 use secondnetwork\TablerIcons\BladeTablerIconsServiceProvider;
 
 class CompilesIconsTest extends TestCase
