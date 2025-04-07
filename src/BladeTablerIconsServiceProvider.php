@@ -7,6 +7,7 @@ namespace secondnetwork\TablerIcons;
 use BladeUI\Icons\Factory;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Filesystem\Filesystem;
 use BladeUI\Icons\IconsManifest;
 
 final class BladeTablerIconsServiceProvider extends ServiceProvider
@@ -22,7 +23,7 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(IconsManifest::class, function () {
-            return new IconsManifest(
+            return new Filesystem(
                 base_path('bootstrap/cache/icons-manifest.php') // Ou onde for adequado para o seu projeto
             );
         });
