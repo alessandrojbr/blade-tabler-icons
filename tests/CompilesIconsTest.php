@@ -5,7 +5,7 @@ namespace Tests;
 use Orchestra\Testbench\TestCase;
 use BladeUI\Icons\Factory;
 use Illuminate\Support\Facades\Blade;
-use Tabler\Icons\BladeTablerIconsServiceProvider;
+use secondnetwork\TablerIcons\BladeTablerIconsServiceProvider;
 
 class CompilesIconsTest extends TestCase
 {
