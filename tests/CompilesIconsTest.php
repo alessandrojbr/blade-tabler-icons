@@ -20,12 +20,10 @@ class CompilesIconsTest extends TestCase
     {
         parent::setUp();
 
-        $this->app->make(Factory::class)->register([
-            'tabler' => [
-                'path' => __DIR__.'/../resources/svg',
-                'prefix' => 'tabler',
-            ],
-        ]);
+        $this->app->make(Factory::class)->add('tabler', [
+          'path' => __DIR__.'/../resources/svg',
+          'prefix' => 'tabler',
+      ]);
     }
 
     /** @test */

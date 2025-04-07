@@ -28,6 +28,13 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+
+        $this->app->make(Factory::class)->add('tabler', [
+            'path' => __DIR__.'/../resources/svg',
+            'prefix' => 'tabler',
+        ]);
+
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../resources/svg' => public_path('vendor/blade-tabler-icons'),
