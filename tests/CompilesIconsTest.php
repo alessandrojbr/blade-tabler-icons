@@ -4,6 +4,8 @@ namespace Tests;
 
 use BladeUI\Icons\Factory;
 use Orchestra\Testbench\TestCase;
+use BladeUI\Icons\IconsManifest;
+use Illuminate\Filesystem\Filesystem;
 use secondnetwork\TablerIcons\BladeTablerIconsServiceProvider;
 
 class CompilesIconsTest extends TestCase
@@ -25,8 +27,9 @@ class CompilesIconsTest extends TestCase
         ]);
 
         $this->app->bind(IconsManifest::class, function () {
-        return new IconsManifest(
-            base_path('tests/stubs/icons-manifest.php') // Caminho fake ou válido só para o teste
+            return new IconsManifest(
+                new Filesystem(),
+                base_path('tests/stubs/icons-manifest.php')
             );
         });
     }
