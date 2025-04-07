@@ -126,3 +126,26 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
+
+
+# PHPStan / Larastan
+/phpstan.cache
+
+# PHP CS Fixer
+/.php-cs-fixer.cache
+
+# Composer e dependências
+/vendor
+/composer.lock
+
+# Node/Bun
+/node_modules
+/bun.lockb
+
+# IDEs e sistema
+.idea
+.vscode
+.DS_Store
+
+# Laravel Testbench cache (se estiver usando)
+/bootstrap/cache
