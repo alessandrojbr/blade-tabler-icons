@@ -7,6 +7,7 @@ namespace secondnetwork\TablerIcons;
 use BladeUI\Icons\Factory;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
+use BladeUI\Icons\IconsManifest;
 
 final class BladeTablerIconsServiceProvider extends ServiceProvider
 {
@@ -18,6 +19,12 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
             $config = $container->make('config')->get('blade-tabler-icons', []);
 
             $factory->add('tabler', array_merge(['path' => __DIR__.'/../resources/svg'], $config));
+        });
+
+        $this->app->singleton(IconsManifest::class, function () {
+            return new IconsManifest(
+                base_path('bootstrap/cache/icons-manifest.php') // Ou onde for adequado para o seu projeto
+            );
         });
     }
 

@@ -22,7 +22,13 @@ class CompilesIconsTest extends TestCase
         $this->app->make(Factory::class)->add('tabler', [
           'path'   => __DIR__.'/../resources/svg',
           'prefix' => 'tabler',
-      ]);
+        ]);
+
+        $this->app->bind(IconsManifest::class, function () {
+        return new IconsManifest(
+            base_path('tests/stubs/icons-manifest.php') // Caminho fake ou válido só para o teste
+            );
+        });
     }
 
     /** @test */
