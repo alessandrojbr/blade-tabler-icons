@@ -1,43 +1,85 @@
-{
-    "name": "secondnetwork/blade-tabler-icons",
-    "description": "A package to easily make use of tabler-icons in your Laravel Blade views.",
-    "keywords": ["Blade", "tabler-icons", "Laravel"],
-    "homepage": "https://github.com/secondnetwork/blade-tabler-icons",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Andreas Farah"
-        }
-    ],
-    "require": {
-        "php": "^8.0",
-        "blade-ui-kit/blade-icons": "^1.8",
-        "illuminate/support": "^9.0|^10.0|^11.0|^12.0"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^6.0|^7.0|^9.0",
-        "phpunit/phpunit": "^9.0|^10.0|^11.0|^12.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "secondnetwork\\TablerIcons\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "secondnetwork\\TablerIcons\\BladeTablerIconsServiceProvider"
-            ]
-        }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
-}
+name: Auto Update Icons
+
+on:
+  workflow_dispatch:
+  pull_request:
+  schedule:
+    - cron: '0 12 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Node.js dependencies
+        run: bun install
+
+      - name: Install PHP dependencies
+        run: composer update --no-interaction --no-progress --dev
+
+      - name: Run PHPStan (Larastan)
+        run: ./vendor/bin/phpstan analyse --memory-limit=512M
+
+      - name: Run PHP CS Fixer (dry-run)
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      - name: Compile icons to resources directory
+        run: ./vendor/bin/blade-icons-generate
+
+      - name: Run tests
+        run: ./vendor/bin/phpunit --testdox
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create pull request
+        if: steps.git-check.outputs.changed == 'true'
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          title: Icons Release ID:${{ github.run_number }}
+          body: Auto Update Icons ID:${{ github.run_number }} RUN_ID:${{ github.run_id }}
+          commit-message: 'feat: automated change Icons Release ID:${{ github.run_number }}'
+          branch: auto/icons-update
+          base: main
+          delete-branch: true
+
+      - name: Enable auto-merge for PR
+        if: steps.cpr.outputs.pull-request-number
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
