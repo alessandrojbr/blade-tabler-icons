@@ -2,9 +2,8 @@
 
 namespace Tests;
 
-use Orchestra\Testbench\TestCase;
 use BladeUI\Icons\Factory;
-use Illuminate\Support\Facades\Blade;
+use Orchestra\Testbench\TestCase;
 use secondnetwork\TablerIcons\BladeTablerIconsServiceProvider;
 
 class CompilesIconsTest extends TestCase
@@ -21,7 +20,7 @@ class CompilesIconsTest extends TestCase
         parent::setUp();
 
         $this->app->make(Factory::class)->add('tabler', [
-          'path' => __DIR__.'/../resources/svg',
+          'path'   => __DIR__.'/../resources/svg',
           'prefix' => 'tabler',
       ]);
     }

@@ -30,7 +30,7 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
     {
 
         $this->app->make(Factory::class)->add('tabler', [
-            'path' => __DIR__.'/../resources/svg',
+            'path'   => __DIR__.'/../resources/svg',
             'prefix' => 'tabler',
         ]);
 
