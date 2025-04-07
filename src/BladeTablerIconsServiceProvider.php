@@ -23,8 +23,9 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(IconsManifest::class, function () {
-            return new Filesystem(
-                base_path('bootstrap/cache/icons-manifest.php') // Ou onde for adequado para o seu projeto
+            return new IconsManifest(
+                new Filesystem,
+                base_path('bootstrap/cache/icons-manifest.php')
             );
         });
     }
