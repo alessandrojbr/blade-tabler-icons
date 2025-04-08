@@ -15,11 +15,25 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerConfig();
+    }
 
-        $this->callAfterResolving(Factory::class, function (Factory $factory, Container $container) {
-            $config = $container->make('config')->get('blade-tabler-icons', []);
+    public function boot(): void
+    {
+        $this->bootIcons();
+    }
 
-            $factory->add('tabler', array_merge(['path' => __DIR__.'/../resources/svg'], $config));
+    private function registerConfig(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/blade-tabler-icons.php', 'blade-tabler-icons');
+    }
+
+    private function bootIcons(): void
+    {
+        $this->callAfterResolving(Factory::class, function (Factory $factory) {
+            $factory->add('tabler', [
+                'path' => __DIR__.'/../resources/svg',
+                'prefix' => 'tabler',
+            ]);
         });
 
         $this->app->singleton(IconsManifest::class, function () {
@@ -28,21 +42,6 @@ final class BladeTablerIconsServiceProvider extends ServiceProvider
                 base_path('bootstrap/cache/icons-manifest.php')
             );
         });
-    }
-
-    private function registerConfig(): void
-    {
-        $this->mergeConfigFrom(__DIR__.'/../config/blade-tabler-icons.php', 'blade-tabler-icons');
-    }
-
-    public function boot(): void
-    {
-
-        $this->app->make(Factory::class)->add('tabler', [
-            'path'   => __DIR__.'/../resources/svg',
-            'prefix' => 'tabler',
-        ]);
-
 
         if ($this->app->runningInConsole()) {
             $this->publishes([

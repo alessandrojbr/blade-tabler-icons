@@ -16,19 +16,12 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.75",
-    "nunomaduro/larastan": "^3.3",
-    "orchestra/testbench": "^6.0|^7.0|^9.0",
-    "phpunit/phpunit": "^9.0|^10.0|^11.0|^12.0"
+    "nunomaduro/larastan": "^3.3"
   },
   "autoload": {
       "psr-4": {
           "secondnetwork\\TablerIcons\\": "src"
     }
-  },
-  "autoload-dev": {
-      "psr-4": {
-          "Tests\\": "tests"
-      }
   },
   "extra": {
       "laravel": {
